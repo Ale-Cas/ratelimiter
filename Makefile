@@ -1,18 +1,19 @@
+install: 
+	go install
+	export GOROOT=$HOME/go
+	export PATH=$PATH:$GOROOT/bin
+
 run: 
-	go run main.go
+	go run .
 
 test:
-	go test -v ./...
+	go test -v ./src
 
 coverage:
-	go test -coverprofile=coverage.out ./...
+	go test -coverprofile=coverage.out ./src
 	go tool cover -html=coverage.out
 
 lint:
 	go fmt ./...
 	govulncheck ./...
 
-install: 
-	go install
-	export GOROOT=$HOME/go
-	export PATH=$PATH:$GOROOT/bin
