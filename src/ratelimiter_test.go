@@ -17,6 +17,7 @@ var (
 
 const bucketCapacity = uint64(1)
 
+// setup initializes the router and the request.
 func setup() {
 	gin.SetMode(gin.TestMode)
 	router = gin.Default()
@@ -29,12 +30,14 @@ func setup() {
 	buckets = []TokenBucket{}
 }
 
+// testRequest sends a request to the server and checks the status code.
 func testRequest(t *testing.T, expectedStatus int) {
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, expectedStatus, w.Code)
 }
 
+// TestTokenBucketLimiter_NewClient tests the case where a new client makes a request.
 func TestTokenBucketLimiter_NewClient(t *testing.T) {
 	setup()
 	w := httptest.NewRecorder()
@@ -46,6 +49,7 @@ func TestTokenBucketLimiter_NewClient(t *testing.T) {
 	assert.Equal(t, bucketCapacity, buckets[0].tokens)
 }
 
+// TestTokenBucketLimiter_ExistingClient tests the case where an existing client makes a request.
 func TestTokenBucketLimiter_ExistingClient(t *testing.T) {
 	setup()
 	w := httptest.NewRecorder()
@@ -58,6 +62,7 @@ func TestTokenBucketLimiter_ExistingClient(t *testing.T) {
 	assert.Equal(t, uint64(0), buckets[0].tokens)
 }
 
+// TestTokenBucketLimiter_TooManyRequests tests the case where a client makes too many requests.
 func TestTokenBucketLimiter_TooManyRequests(t *testing.T) {
 	setup()
 	testRequest(t, http.StatusOK)

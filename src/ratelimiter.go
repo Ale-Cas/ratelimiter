@@ -54,6 +54,8 @@ func TokenBucketLimiter(reqPerSec uint64) gin.HandlerFunc {
 				}
 			}
 		}
+		// If the client's IP address is not in the buckets slice,
+		// create a new bucket for that client
 		bucket := TokenBucket{
 			ipAddr:           c.ClientIP(),
 			tokens:           reqPerSec,
